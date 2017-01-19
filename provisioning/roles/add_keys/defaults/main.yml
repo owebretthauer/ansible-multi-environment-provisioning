@@ -1,0 +1,13 @@
+users: ['root']
+
+keySetDefault: "admins"
+
+keys:
+  admins:
+    present_keys: ['demo.pub']
+    absent_keys: []
+
+  developers:
+    present_keys: []
+    absent_keys: []
+

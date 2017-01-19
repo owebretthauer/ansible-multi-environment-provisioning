@@ -1,0 +1,16 @@
+---
+
+#- debug: msg="{{ keys[keySetDefault]['present_keys'] }}"
+#- debug: msg="{{ keys[keySetDefault]['absent_keys'] }}"
+
+- name: Remove Remote Users
+  authorized_key: user="{{ item.0 }}" key="{{ lookup('file', 'keys/' + item.1) }}  " state=absent
+  with_nested:
+    - "{{users}}"
+    - "{{ keys[keySetDefault]['absent_keys'] }}"
+
+- name: Add Remote Users
+  authorized_key: user="{{ item.0 }}" key="{{ lookup('file', 'keys/' + item.1) }}  " state=present
+  with_nested:
+    - "{{users}}"
+    - "{{ keys[keySetDefault]['present_keys'] }}"

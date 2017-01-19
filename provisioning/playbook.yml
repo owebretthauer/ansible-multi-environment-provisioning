@@ -1,0 +1,6 @@
+- hosts: servers
+  user: vagrant 
+  become: yes
+
+  roles:
+    - add_keys
