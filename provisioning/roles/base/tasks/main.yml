@@ -1,0 +1,32 @@
+---
+- name: ensure custom facts directory exists
+  file: >
+    path=/etc/ansible/facts.d
+    recurse=yes
+    state=directory
+
+- name: install custom fact module for IP address
+  template: >
+    src=tinc_facts.sh.j2
+    dest=/etc/ansible/facts.d/tinc_facts.fact
+    mode=0755
+
+- name: reload ansible_local
+  setup: filter=ansible_local
+
+- name: Update apt cache if needed
+  apt: update_cache=yes cache_valid_time=3600
+
+#- name: Upgrade all Packages
+#  apt:
+#    upgrade: yes
+
+- name: Get Basic Packages
+  apt: name={{ item }} state=present
+  with_items:
+    - curl
+    - wget
+    - vim
+    - tomcat8
+    - unzip
+    - mc

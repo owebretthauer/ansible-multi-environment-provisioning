@@ -1,6 +1,9 @@
 - hosts: servers
-  user: vagrant 
+  user: vagrant
+  #user: root
   become: yes
 
   roles:
     - add_keys
+    - base
+    - deploy_application

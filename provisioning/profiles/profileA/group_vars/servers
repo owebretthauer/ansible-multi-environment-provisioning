@@ -1,0 +1,21 @@
+---
+## SSH Key-Management
+users: ['root']
+
+## Tomcat Properties ##
+application_name: demo
+#### Tomcat related folders ####
+context_name: "{{ application_name }}"
+
+webapps_folder: /srv/www/tomcat
+archive_folder: "/tmp/archive"
+webapps_archive_folder: "{{ archive_folder }}/war"
+
+war_src: "../target/{{ application_name }}.war"
+war_target: "{{ webapps_archive_folder }}/{{ application_name }}.war"
+
+tomcat_user: tomcat8
+tomcat_group: tomcat8
+tomcat_path: /var/lib/tomcat8
+tomcat_config_file: "/etc/tomcat8/Catalina/localhost/{{ context_name }}.xml"
+tomcat_doc_base: "{{ webapps_folder }}/{{ context_name }}"
