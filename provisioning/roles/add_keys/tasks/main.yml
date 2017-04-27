@@ -1,7 +1,7 @@
 ---
 
-#- debug: msg="{{ keys[keySetDefault]['present_keys'] }}"
-#- debug: msg="{{ keys[keySetDefault]['absent_keys'] }}"
+- debug: msg="{{ keys[keySetDefault]['present_keys'] }}"
+- debug: msg="{{ keys[keySetDefault]['absent_keys'] }}"
 
 - name: Remove Remote Users
   authorized_key: user="{{ item.0 }}" key="{{ lookup('file', 'keys/' + item.1) }}  " state=absent

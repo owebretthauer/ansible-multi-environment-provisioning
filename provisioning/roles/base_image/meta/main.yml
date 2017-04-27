@@ -1,7 +1,7 @@
 galaxy_info:
   author: Owe Bretthauer
-  description: Demo Installation
-  company: Demo Inc.
+  description: Base Image
+  company: private use
   license: license (GPLv2, CC-BY, etc)
   min_ansible_version: 1.2
   galaxy_tags: []

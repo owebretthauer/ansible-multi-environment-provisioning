@@ -19,6 +19,7 @@
 - name: stop tomcat
   action: service name=tomcat8 state=stopped
   become: true
+  when: ansible_connection != 'docker'
 
 - name: unzip war file
   action: unarchive src="{{ war_target }}" dest="{{ tomcat_doc_base }}" owner="{{ tomcat_user }}" group="{{ tomcat_group }}" remote_src=true
@@ -30,3 +31,4 @@
 - name: start tomcat
   action: service name=tomcat8 state=started
   become: true
+  when: ansible_connection != 'docker'

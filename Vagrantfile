@@ -16,29 +16,31 @@ Vagrant.configure("2") do |config|
       end
   end
 
-  config.vm.define "vm2" do |vm2|
-      vm2.vm.box = "debian/jessie64"
-      vm2.vm.network "public_network", :bridge => 'enp3s0'
 
-      vm2.vm.provider "virtualbox" do |vb|
-         vb.memory = "512"
-      end
-  end
+#  config.vm.define "vm2" do |vm2|
+#      vm2.vm.box = "debian/jessie64"
+#      vm2.vm.network "public_network", :bridge => 'enp3s0'
+#
+#      vm2.vm.provider "virtualbox" do |vb|
+#         vb.memory = "512"
+#      end
+#  end
 
-  config.vm.define "vm3" do |vm3|
-      vm3.vm.box = "debian/jessie64"
-      vm3.vm.network "public_network", :bridge => 'enp3s0'
-
-      vm3.vm.provider "virtualbox" do |vb|
-         vb.memory = "512"
-      end
-  end
+#  config.vm.define "vm3" do |vm3|
+#      vm3.vm.box = "debian/jessie64"
+#      vm3.vm.network "public_network", :bridge => 'enp3s0'#
+#
+#      vm3.vm.provider "virtualbox" do |vb|
+#         vb.memory = "512"
+#      end
+#  end
 
   config.vm.provision :ansible do |ansible|
-    ansible.playbook = "provisioning/playbook.yml"
+    ansible.playbook = "provisioning/full-image.yml"
     ansible.groups = {
-        "servers" => ["vm1", "vm2", "vm3"]
+        "servers" => ["vm1"]
     }
+    ansible.raw_arguments = ["-u vagrant"]
   end
 
 end

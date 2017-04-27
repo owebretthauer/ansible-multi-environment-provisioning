@@ -1,1 +1,1 @@
-users: ['demo', "demo2"]keySetDefault: "developers"
+users: ["root"]keySetDefault: "developers"keys:  admins:    present_keys: ['demo.pub']    absent_keys: []  developers:    present_keys: ['demo.pub']    absent_keys: []

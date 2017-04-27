@@ -1,0 +1,7 @@
+- hosts: servers
+  user: root
+  become: yes
+
+  roles:
+    - add_keys
+    - base_image

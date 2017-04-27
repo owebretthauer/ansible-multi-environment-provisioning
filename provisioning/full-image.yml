@@ -1,0 +1,3 @@
+- include: base-image.yml
+- include: tomcat-image.yml
+- include: deploy-application.yml
