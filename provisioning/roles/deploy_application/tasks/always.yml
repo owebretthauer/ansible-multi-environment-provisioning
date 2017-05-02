@@ -1,0 +1,17 @@
+---
+
+- name: create tomcat context file
+  action: template src="tomcat.xml.j2" dest="{{ tomcat_config_file}}" owner="{{ tomcat_user }}" group="{{ tomcat_group }}"
+  become: true
+
+- name: start tomcat
+  action: service name=tomcat8 state=started
+  become: true
+  when: ansible_connection != 'docker'
+
+- name: Finalize the deploy, removing the unfinished file and switching the symlink
+  deploy_helper:
+    path: "{{ tomcat_doc_base }}"
+    release: '{{ deploy_helper.new_release }}'
+    keep_releases: 2
+    state: clean

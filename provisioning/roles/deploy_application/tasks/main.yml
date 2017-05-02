@@ -1,34 +1,28 @@
 ---
 
-- name: make sure directory webapps archive folder exists
-  action: file path="{{ webapps_archive_folder }}" state=directory mode=0755 owner={{ tomcat_user }} group={{ tomcat_group }}
-  become: true
-
-- name: make sure directory webapps archive folder exists
-  action: file path="{{ tomcat_doc_base }}" state=directory mode=0755 owner={{ tomcat_user }} group={{ tomcat_group }}
-  become: true
-
-- name: copy war file
-  copy: src="{{ war_src }}" dest="{{ war_target }}" mode=644 owner={{ ansible_ssh_user }} group={{ ansible_ssh_user }}
-  become: true
-
-- name: create tomcat context file
-  action: template src="tomcat.xml.j2" dest="{{ tomcat_config_file}}" owner="{{ tomcat_user }}" group="{{ tomcat_group }}"
-  become: true
-
+# pre-condition
 - name: stop tomcat
   action: service name=tomcat8 state=stopped
   become: true
   when: ansible_connection != 'docker'
 
-- name: unzip war file
-  action: unarchive src="{{ war_target }}" dest="{{ tomcat_doc_base }}" owner="{{ tomcat_user }}" group="{{ tomcat_group }}" remote_src=true
+- name: make sure web archive upload folder exists
+  action: file path="{{ webapps_archive_folder }}" state=directory mode=0755 owner={{ tomcat_user }} group={{ tomcat_group }}
   become: true
 
-- name: File Permissions
-  file: path={{ tomcat_doc_base }} owner=tomcat8 group=tomcat8 recurse=yes state=directory
+- name: file informations last success full application
+  action: stat path="{{ tomcat_doc_base }}/current"
+  register: locationLastApplication
 
-- name: start tomcat
-  action: service name=tomcat8 state=started
-  become: true
-  when: ansible_connection != 'docker'
+# deployment
+- block:
+
+  - include: deployment.yml
+
+  rescue:
+
+    - include: rollback_previous_version.yml
+
+  always:
+
+    - include: always.yml

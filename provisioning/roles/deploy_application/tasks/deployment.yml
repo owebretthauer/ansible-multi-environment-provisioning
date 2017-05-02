@@ -1,0 +1,35 @@
+---
+- name: Initialize the deploy root and gather facts
+  deploy_helper:
+    release: v1.0.11
+    path: "{{ tomcat_doc_base }}"
+
+- set_fact: tomcat_docBase="{{ deploy_helper.new_release_path }}"
+
+- name: make sure directory webapps archive folder exists
+  action: file path="{{ deploy_helper.new_release_path }}" state=directory mode=0755 owner={{ tomcat_user }} group={{ tomcat_group }}
+  become: true
+
+- name: Add an unfinished file, to allow cleanup on successful finalize
+  file:
+    path: '{{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}'
+    state: touch
+
+- name: copy war file
+  copy: src="{{ war_src }}" dest="{{ war_target }}" mode=644 owner={{ ansible_ssh_user }} group={{ ansible_ssh_user }}
+  become: true
+
+- name: unzip war file
+  action: unarchive src="{{ war_target }}" dest="{{ deploy_helper.new_release_path }}" owner="{{ tomcat_user }}" group="{{ tomcat_group }}" remote_src=true
+  become: true
+
+# - action: command /bin/false # Test Build Failure
+
+- name: File Permissions
+  file: path={{ deploy_helper.new_release_path }} owner=tomcat8 group=tomcat8 recurse=yes state=directory
+
+- name: Finalize the deploy, removing the unfinished file and switching the symlink
+  deploy_helper:
+    path: "{{ tomcat_doc_base }}"
+    release: '{{ deploy_helper.new_release }}'
+    state: finalize

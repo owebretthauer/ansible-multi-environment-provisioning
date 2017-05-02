@@ -7,9 +7,9 @@
 # you're doing.
 Vagrant.configure("2") do |config|
 
-  config.vm.define "vm1" do |vm1|
+  config.vm.define "tomcat" do |vm1|
       vm1.vm.box = "debian/jessie64"
-      vm1.vm.network "public_network", :bridge => 'enp3s0'
+      vm1.vm.network "public_network", :bridge => 'enp3s0', ip: "192.168.178.50"
 
       vm1.vm.provider "virtualbox" do |vb|
          vb.memory = "512"
@@ -17,28 +17,38 @@ Vagrant.configure("2") do |config|
   end
 
 
-#  config.vm.define "vm2" do |vm2|
+#  config.vm.define "webserver" do |vm2|
 #      vm2.vm.box = "debian/jessie64"
-#      vm2.vm.network "public_network", :bridge => 'enp3s0'
-#
+#      vm2.vm.network "public_network", :bridge => 'enp3s0', ip: "192.168.178.50"
+
 #      vm2.vm.provider "virtualbox" do |vb|
 #         vb.memory = "512"
 #      end
 #  end
 
-#  config.vm.define "vm3" do |vm3|
+#  config.vm.define "postgresql" do |vm3|
 #      vm3.vm.box = "debian/jessie64"
-#      vm3.vm.network "public_network", :bridge => 'enp3s0'#
-#
+#      vm3.vm.network "public_network", :bridge => 'enp3s0', ip: "192.168.178.50"
+
 #      vm3.vm.provider "virtualbox" do |vb|
 #         vb.memory = "512"
 #      end
 #  end
 
+#  config.vm.define "rabbitmq" do |vm3|
+#      vm4.vm.box = "debian/jessie64"
+#      vm4.vm.network "public_network", :bridge => 'enp3s0', ip: "192.168.178.50"
+
+#      vm4.vm.provider "virtualbox" do |vb|
+#         vb.memory = "512"
+#      end
+#  end
+
+
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "provisioning/full-image.yml"
     ansible.groups = {
-        "servers" => ["vm1"]
+        "servers" => ["tomcat"]
     }
     ansible.raw_arguments = ["-u vagrant"]
   end

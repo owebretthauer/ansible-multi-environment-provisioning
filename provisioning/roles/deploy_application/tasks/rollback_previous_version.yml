@@ -1,0 +1,6 @@
+---
+
+- set_fact: tomcat_docBase="{{ locationLastApplication.stat.lnk_source }}"
+
+- name: link to last successful application location
+  action: file src="{{ tomcat_docBase }}" dest="{{ tomcat_doc_base }}/current" state=link
